@@ -195,9 +195,9 @@ body {
     text-transform: uppercase;
 }
 
-.hero-banner p {
-    color: #a7f3d0; /* Changed from grey (#94a3b8) to a soft, glowing mint green */
-    font-size: 0.95rem;
+.hero-banner {
+    background-color: #90EE92; /* Light green background */
+    color: #FFFFFF;            /* White font color */
 }
 
 .stats-grid {
