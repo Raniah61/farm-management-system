@@ -420,6 +420,13 @@ tr:last-child td {
     .main-content {
         margin-left: 70px;
     }
+    .content-section {
+    display: none; /* Hide sections by default */
+}
+
+.content-section.active {
+    display: block; /* Show only the active section */
+}
     .top-header {
         padding: 0 16px;
     }
