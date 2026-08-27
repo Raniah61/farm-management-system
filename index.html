@@ -923,6 +923,20 @@
             tbody.prepend(tr);
             logAuditAction('feeding_schedules', `Assigned ration to ${section} (${qty} kg)`);
             closeScheduleModal();
+            document.querySelectorAll('.sidebar-menu-item').forEach(item => {
+    item.addEventListener('click', function(e) {
+        // Optional: e.preventDefault() if they are anchor tags
+        
+        // Hide all sections
+        document.querySelectorAll('.content-section').forEach(sec => {
+            sec.classList.remove('active');
+        });
+        
+        // Show the target section based on data attribute or ID
+        const targetId = this.getAttribute('data-target');
+        document.getElementById(targetId).classList.add('active');
+    });
+});
         }
     </script>
 </body>
