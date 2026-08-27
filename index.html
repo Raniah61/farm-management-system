@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartFarm DB Console</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- SIDEBAR / RESPONSIVE TOP NAV DRAWER -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                🌱 SmartFarm
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-link active" onclick="switchView('overview', this)">📊 Overview & Logs</a>
+                <a href="#" class="nav-link" onclick="switchView('animals', this)">🐄 Animals</a>
+                <a href="#" class="nav-link" onclick="switchView('poultry', this)">🐔 Poultry Batches</a>
+                <a href="#" class="nav-link" onclick="switchView('production', this)">🥛 Production</a>
+                <a href="#" class="nav-link" onclick="switchView('health', this)">💉 Health Records</a>
+                <a href="#" class="nav-link" onclick="switchView('feeding', this)">🌾 Feed & Rations</a>
+            </nav>
+            <div class="sidebar-footer">
+                <p>SmartFarm DB v2.6</p>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="main-content">
+            <!-- TOP HEADER -->
+            <header class="top-header">
+                <div>
+                    <h1 id="view-title">Farm Overview & Audit Logs</h1>
+                    <p id="view-subtitle">Real-time database records mirroring SQLite schema tables.</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-install" onclick="triggerInstallPrompt()">📱 Add to Home Screen</button>
+                    <div class="user-avatar" title="Raniah">R</div>
+                </div>
+            </header>
+
+            <!-- DASHBOARD BODY -->
+            <div class="dashboard-body">
+
+                <!-- VIEW 1: OVERVIEW & AUDIT LOGS -->
+                <section id="view-overview" class="view-section">
+                    <div class="hero-banner">
+                        <div class="hero-content">
+                            <span class="badge">Database Console</span>
+                            <h2>Integrated Agricultural Management System</h2>
+                            <p>Tracking live database entities from animals, batches, health logs, to system audit trails.</p>
+                        </div>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon emerald">🐄</div>
+                            <div>
+                                <div class="stat-label">Animals Table Count</div>
+                                <div class="stat-value" id="stat-animals">1</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon blue">🐔</div>
+                            <div>
+                                <div class="stat-label">Poultry Batches Count</div>
+                                <div class="stat-value" id="stat-poultry">1</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon amber">🌾</div>
+                            <div>
+                                <div class="stat-label">Feed Inventory Items</div>
+                                <div class="stat-value" id="stat-feeds">2</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon rose">📋</div>
+                            <div>
+                                <div class="stat-label">Audit Logs Tracked</div>
+                                <div class="stat-value" id="stat-logs">3</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AUDIT LOGS TABLE -->
+                    <div class="table-card">
+                        <div class="table-header">
+                            <h3>Audit Logs Table (`audit_logs`)</h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Log ID</th>
+                                        <th>Action Type</th>
+                                        <th>Table Name</th>
+                                        <th>Record Info</th>
+                                        <th>Action Timestamp</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="audit-logs-table-body">
+                                    <tr>
+                                        <td class="font-bold">#1</td>
+                                        <td><span class="status-badge emerald">INSERT</span></td>
+                                        <td>animals</td>
+                                        <td>Added tag_number: #TAG-001</td>
+                                        <td>2026-08-26 08:30:00</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-bold">#2</td>
+                                        <td><span class="status-badge emerald">INSERT</span></td>
+                                        <td>poultry_batches</td>
+                                        <td>Added batch_name: #FLOCK-010</td>
+                                        <td>2026-08-25 11:10:00</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-bold">#3</td>
+                                        <td><span class="status-badge amber">UPDATE</span></td>
+                                        <td>feed_inventory</td>
+                                        <td>Restocked Maize Bran quantity</td>
+                                        <td>2026-08-25 16:45:00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW 2: ANIMALS TABLE -->
+                <section id="view-animals" class="view-section hidden">
+                    <div class="table-card">
+                        <div class="table-header">
+                            <h3>Animals Table (`animals`)</h3>
+                            <button onclick="openAnimalModal()" class="btn-primary">➕ Insert Animal Record</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Animal ID</th>
+                                        <th>Tag Number</th>
+                                        <th>Species</th>
+                                        <th>Breed</th>
+                                        <th>Gender</th>
+                                        <th>Purpose</th>
+                                        <th>Birth Date</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="animals-table-body">
+                                    <tr>
+                                        <td class="font-bold">1</td>
+                                        <td>#TAG-001</td>
+                                        <td>Dairy Cattle</td>
+                                        <td>Ankole-Friesian Cross</td>
+                                        <td>Female</td>
+                                        <td>Milk Production</td>
+                                        <td>2024-05-12</td>
+                                        <td><span class="status-badge emerald">Active</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW 3: POULTRY BATCHES TABLE -->
+                <section id="view-poultry" class="view-section hidden">
+                    <div class="table-card">
+                        <div class="table-header">
+                            <h3>Poultry Batches Table (`poultry_batches`)</h3>
+                            <button onclick="openPoultryModal()" class="btn-primary">➕ Insert Poultry Batch</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Batch ID</th>
+                                        <th>Batch Name</th>
+                                        <th>Breed</th>
+                                        <th>Initial Count</th>
+                                        <th>Current Count</th>
+                                        <th>Purpose</th>
+                                        <th>Arrival Date</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="poultry-table-body">
+                                    <tr>
+                                        <td class="font-bold">1</td>
+                                        <td>#FLOCK-010</td>
+                                        <td>Isa Brown</td>
+                                        <td>500</td>
+                                        <td>485</td>
+                                        <td>Egg Production</td>
+                                        <td>2025-02-10</td>
+                                        <td><span class="status-badge emerald">Active</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW 4: PRODUCTION RECORDS TABLE -->
+                <section id="view-production" class="view-section hidden">
+                    <div class="table-card">
+                        <div class="table-header">
+                            <h3>Production Records Table (`production_records`)</h3>
+                            <button onclick="openProductionModal()" class="btn-primary">➕ Insert Production Log</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Production ID</th>
+                                        <th>Animal ID / Batch ID</th>
+                                        <th>Metric Type</th>
+                                        <th>Quantity</th>
+                                        <th>Recording Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="production-table-body">
+                                    <tr>
+                                        <td class="font-bold">1</td>
+                                        <td>Animal ID: 1 (#TAG-001)</td>
+                                        <td><span class="status-badge emerald">Milk Yield (Liters)</span></td>
+                                        <td>22.5 L</td>
+                                        <td>2026-08-26</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-bold">2</td>
+                                        <td>Batch ID: 1 (#FLOCK-010)</td>
+                                        <td><span class="status-badge amber">Egg Output (Crates)</span></td>
+                                        <td>15 Crates</td>
+                                        <td>2026-08-26</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW 5: HEALTH RECORDS TABLE -->
+                <section id="view-health" class="view-section hidden">
+                    <div class="table-card">
+                        <div class="table-header">
+                            <h3>Health Records Table (`health_records`)</h3>
+                            <button onclick="openHealthModal()" class="btn-primary">➕ Insert Health Log</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Health ID</th>
+                                        <th>Entity (Animal / Batch)</th>
+                                        <th>Event Type</th>
+                                        <th>Description</th>
+                                        <th>Medication Used</th>
+                                        <th>Cost ($)</th>
+                                        <th>Event Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="health-table-body">
+                                    <tr>
+                                        <td class="font-bold">1</td>
+                                        <td>Batch ID: 1 (#FLOCK-010)</td>
+                                        <td>Vaccination</td>
+                                        <td>Newcastle Disease prevention</td>
+                                        <td>Oral Vaccine Drops</td>
+                                        <td>$15.00</td>
+                                        <td>2026-08-20</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW 6: FEED INVENTORY & SCHEDULES TABLES -->
+                <section id="view-feeding" class="view-section hidden">
+                    <div class="table-card" style="margin-bottom: 24px;">
+                        <div class="table-header">
+                            <h3>Feed Inventory Table (`feed_inventory`)</h3>
+                            <button onclick="openFeedModal()" class="btn-primary">➕ Add Feed Item</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Feed ID</th>
+                                        <th>Feed Name</th>
+                                        <th>Category</th>
+                                        <th>Stock Quantity (kg)</th>
+                                        <th>Unit Cost</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="feed-inventory-table-body">
+                                    <tr>
+                                        <td class="font-bold">1</td>
+                                        <td>Dairy Meal Pellets</td>
+                                        <td>Concentrates</td>
+                                        <td>2250 kg (45 Bags)</td>
+                                        <td>$25.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-bold">2</td>
+                                        <td>Maize Bran</td>
+                                        <td>Energy Feeds</td>
+                                        <td>600 kg (12 Bags)</td>
+                                        <td>$14.00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="table-card">
+                        <div class="table-header">
+                            <h3>Feeding Schedules Table (`feeding_schedules`)</h3>
+                            <button onclick="openScheduleModal()" class="btn-primary">➕ Assign Ration</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Ration ID</th>
+                                        <th>Feed ID</th>
+                                        <th>Target Section</th>
+                                        <th>Daily Quantity (kg)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="feeding-schedule-table-body">
+                                    <tr>
+                                        <td class="font-bold">1</td>
+                                        <td>Feed ID: 1 (Dairy Meal Pellets)</td>
+                                        <td>Cattle Barn A</td>
+                                        <td>45.0 kg</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- MODALS FOR DB INSERTIONS -->
+    
+    <!-- ANIMAL MODAL -->
+    <div id="animalModal" class="modal-overlay hidden">
+        <div class="modal-box">
+            <h3>Insert Record into `animals`</h3>
+            <form onsubmit="addAnimalRow(event)">
+                <div class="form-group"><label>Tag Number</label><input type="text" id="anim_tag" required placeholder="#TAG-002"></div>
+                <div class="form-group"><label>Species</label><input type="text" id="anim_species" required placeholder="Dairy Cattle"></div>
+                <div class="form-group"><label>Breed</label><input type="text" id="anim_breed" placeholder="Friesian"></div>
+                <div class="form-group"><label>Gender</label><select id="anim_gender"><option value="Female">Female</option><option value="Male">Male</option></select></div>
+                <div class="form-group"><label>Purpose</label><input type="text" id="anim_purpose" required placeholder="Milk / Breeding"></div>
+                <div class="form-group"><label>Birth Date</label><input type="date" id="anim_dob"></div>
+                <div class="modal-actions">
+                    <button type="button" onclick="closeAnimalModal()" class="btn-secondary">Cancel</button>
+                    <button type="submit" class="btn-primary">Insert Record</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- POULTRY BATCH MODAL -->
+    <div id="poultryModal" class="modal-overlay hidden">
+        <div class="modal-box">
+            <h3>Insert Record into `poultry_batches`</h3>
+            <form onsubmit="addPoultryRow(event)">
+                <div class="form-group"><label>Batch Name</label><input type="text" id="poul_name" required placeholder="#FLOCK-011"></div>
+                <div class="form-group"><label>Breed</label><input type="text" id="poul_breed" placeholder="Broilers"></div>
+                <div class="form-group"><label>Initial Count</label><input type="number" id="poul_initial" required placeholder="200"></div>
+                <div class="form-group"><label>Current Count</label><input type="number" id="poul_current" required placeholder="195"></div>
+                <div class="form-group"><label>Purpose</label><input type="text" id="poul_purpose" required placeholder="Meat Production"></div>
+                <div class="form-group"><label>Arrival Date</label><input type="date" id="poul_date" required></div>
+                <div class="modal-actions">
+                    <button type="button" onclick="closePoultryModal()" class="btn-secondary">Cancel</button>
+                    <button type="submit" class="btn-primary">Insert Record</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- PRODUCTION RECORD MODAL -->
+    <div id="productionModal" class="modal-overlay hidden">
+        <div class="modal-box">
+            <h3>Insert Record into `production_records`</h3>
+            <form onsubmit="addProductionRow(event)">
+                <div class="form-group"><label>Animal ID or Batch ID Reference</label><input type="text" id="prod_ref" required placeholder="Animal ID: 1"></div>
+                <div class="form-group"><label>Metric Type</label><input type="text" id="prod_metric" required placeholder="Milk Yield (Liters)"></div>
+                <div class="form-group"><label>Quantity</label><input type="number" step="0.1" id="prod_qty" required placeholder="20.5"></div>
+                <div class="form-group"><label>Recording Date</label><input type="date" id="prod_date" required></div>
+                <div class="modal-actions">
+                    <button type="button" onclick="closeProductionModal()" class="btn-secondary">Cancel</button>
+                    <button type="submit" class="btn-primary">Insert Record</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- HEALTH RECORD MODAL -->
+    <div id="healthModal" class="modal-overlay hidden">
+        <div class="modal-box">
+            <h3>Insert Record into `health_records`</h3>
+            <form onsubmit="addHealthRow(event)">
+                <div class="form-group"><label>Entity Reference</label><input type="text" id="heal_ref" required placeholder="Animal ID: 1 or Batch ID: 1"></div>
+                <div class="form-group"><label>Event Type</label><input type="text" id="heal_type" required placeholder="Vaccination / Treatment"></div>
+                <div class="form-group"><label>Description</label><input type="text" id="heal_desc" placeholder="Routine checkup"></div>
+                <div class="form-group"><label>Medication Used</label><input type="text" id="heal_med" placeholder="Antibiotic"></div>
+                <div class="form-group"><label>Cost ($)</label><input type="number" step="0.01" id="heal_cost" value="0.00"></div>
+                <div class="form-group"><label>Event Date</label><input type="date" id="heal_date" required></div>
+                <div class="modal-actions">
+                    <button type="button" onclick="closeHealthModal()" class="btn-secondary">Cancel</button>
+                    <button type="submit" class="btn-primary">Insert Record</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- FEED INVENTORY MODAL -->
+    <div id="feedModal" class="modal-overlay hidden">
+        <div class="modal-box">
+            <h3>Insert Record into `feed_inventory`</h3>
+            <form onsubmit="addFeedRow(event)">
+                <div class="form-group"><label>Feed Name</label><input type="text" id="feed_name" required placeholder="Layers Mash"></div>
+                <div class="form-group"><label>Category</label><input type="text" id="feed_cat" required placeholder="Concentrates"></div>
+                <div class="form-group"><label>Stock Quantity (kg)</label><input type="number" step="0.1" id="feed_qty" required placeholder="500"></div>
+                <div class="form-group"><label>Unit Cost ($)</label><input type="number" step="0.01" id="feed_cost" required placeholder="20.00"></div>
+                <div class="modal-actions">
+                    <button type="button" onclick="closeFeedModal()" class="btn-secondary">Cancel</button>
+                    <button type="submit" class="btn-primary">Insert Record</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- FEEDING SCHEDULE MODAL -->
+    <div id="scheduleModal" class="modal-overlay hidden">
+        <div class="modal-box">
+            <h3>Insert Record into `feeding_schedules`</h3>
+            <form onsubmit="addScheduleRow(event)">
+                <div class="form-group"><label>Feed ID Reference</label><input type="number" id="sched_feed_id" required placeholder="1"></div>
+                <div class="form-group"><label>Target Section</label><input type="text" id="sched_section" required placeholder="Poultry House B"></div>
+                <div class="form-group"><label>Daily Quantity (kg)</label><input type="number" step="0.1" id="sched_qty" required placeholder="25.0"></div>
+                <div class="modal-actions">
+                    <button type="button" onclick="closeScheduleModal()" class="btn-secondary">Cancel</button>
+                    <button type="submit" class="btn-primary">Insert Record</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT CONTROLLERS -->
+    <script>
+        function switchView(viewId, element) {
+            document.querySelectorAll('.view-section').forEach(sec => sec.classList.add('hidden'));
+            document.getElementById('view-' + viewId).classList.remove('hidden');
+
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            element.classList.add('active');
+
+            const titles = {
+                'overview': ['Farm Overview & Audit Logs', 'Real-time database records mirroring SQLite schema tables.'],
+                'animals': ['Animals Table Management', 'Direct interface matching the `animals` database table.'],
+                'poultry': ['Poultry Batches Table', 'Direct interface matching the `poultry_batches` database table.'],
+                'production': ['Production Records Table', 'Direct interface matching the `production_records` database table.'],
+                'health': ['Health Records Table', 'Direct interface matching the `health_records` database table.'],
+                'feeding': ['Feed Inventory & Schedules', 'Direct interface matching `feed_inventory` and `feeding_schedules` tables.']
+            };
+
+            document.getElementById('view-title').innerText = titles[viewId][0];
+            document.getElementById('view-subtitle').innerText = titles[viewId][1];
+        }
+
+        function triggerInstallPrompt() {
+            alert("To add SmartFarm DB Console to your Home Screen:\n\n• Mobile: Open browser settings and select 'Add to Home Screen'.\n• Desktop: Click the installation icon in your address bar.");
+        }
+
+        // Modal Open/Close Controls
+        function openAnimalModal() { document.getElementById('animalModal').classList.remove('hidden'); }
+        function closeAnimalModal() { document.getElementById('animalModal').classList.add('hidden'); }
+
+        function openPoultryModal() { document.getElementById('poultryModal').classList.remove('hidden'); document.getElementById('poul_date').valueAsDate = new Date(); }
+        function closePoultryModal() { document.getElementById('poultryModal').classList.add('hidden'); }
+
+        function openProductionModal() { document.getElementById('productionModal').classList.remove('hidden'); document.getElementById('prod_date').valueAsDate = new Date(); }
+        function closeProductionModal() { document.getElementById('productionModal').classList.add('hidden'); }
+
+        function openHealthModal() { document.getElementById('healthModal').classList.remove('hidden'); document.getElementById('heal_date').valueAsDate = new Date(); }
+        function closeHealthModal() { document.getElementById('healthModal').classList.add('hidden'); }
+
+        function openFeedModal() { document.getElementById('feedModal').classList.remove('hidden'); }
+        function closeFeedModal() { document.getElementById('feedModal').classList.add('hidden'); }
+
+        function openScheduleModal() { document.getElementById('scheduleModal').classList.remove('hidden'); }
+        function closeScheduleModal() { document.getElementById('scheduleModal').classList.add('hidden'); }
+
+        // Helper to push audit log entries dynamically
+        function logAuditAction(tableName, recordInfo, actionType = 'INSERT') {
+            const tableBody = document.getElementById('audit-logs-table-body');
+            const logId = tableBody.rows.length + 1;
+            const now = new Date().toISOString().slice(0, 19).replace('T', ' ');
+
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td class="font-bold">#${logId}</td>
+                <td><span class="status-badge emerald">${actionType}</span></td>
+                <td>${tableName}</td>
+                <td>${recordInfo}</td>
+                <td>${now}</td>
+            `;
+            tableBody.prepend(newRow);
+            document.getElementById('stat-logs').innerText = logId;
+        }
+
+        // Table Insertion Handlers
+        function addAnimalRow(event) {
+            event.preventDefault();
+            const tag = document.getElementById('anim_tag').value;
+            const species = document.getElementById('anim_species').value;
+            const breed = document.getElementById('anim_breed').value || '-';
+            const gender = document.getElementById('anim_gender').value;
+            const purpose = document.getElementById('anim_purpose').value;
+            const dob = document.getElementById('anim_dob').value || '-';
+
+            const tbody = document.getElementById('animals-table-body');
+            const id = tbody.rows.length + 1;
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="font-bold">${id}</td>
+                <td>${tag}</td>
+                <td>${species}</td>
+                <td>${breed}</td>
+                <td>${gender}</td>
+                <td>${purpose}</td>
+                <td>${dob}</td>
+                <td><span class="status-badge emerald">Active</span></td>
+            `;
+            tbody.prepend(tr);
+            document.getElementById('stat-animals').innerText = id;
+            logAuditAction('animals', `Inserted tag_number: ${tag}`);
+            closeAnimalModal();
+        }
+
+        function addPoultryRow(event) {
+            event.preventDefault();
+            const name = document.getElementById('poul_name').value;
+            const breed = document.getElementById('poul_breed').value || '-';
+            const initial = document.getElementById('poul_initial').value;
+            const current = document.getElementById('poul_current').value;
+            const purpose = document.getElementById('poul_purpose').value;
+            const date = document.getElementById('poul_date').value;
+
+            const tbody = document.getElementById('poultry-table-body');
+            const id = tbody.rows.length + 1;
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="font-bold">${id}</td>
+                <td>${name}</td>
+                <td>${breed}</td>
+                <td>${initial}</td>
+                <td>${current}</td>
+                <td>${purpose}</td>
+                <td>${date}</td>
+                <td><span class="status-badge emerald">Active</span></td>
+            `;
+            tbody.prepend(tr);
+            document.getElementById('stat-poultry').innerText = id;
+            logAuditAction('poultry_batches', `Inserted batch_name: ${name}`);
+            closePoultryModal();
+        }
+
+        function addProductionRow(event) {
+            event.preventDefault();
+            const ref = document.getElementById('prod_ref').value;
+            const metric = document.getElementById('prod_metric').value;
+            const qty = document.getElementById('prod_qty').value;
+            const date = document.getElementById('prod_date').value;
+
+            const tbody = document.getElementById('production-table-body');
+            const id = tbody.rows.length + 1;
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="font-bold">${id}</td>
+                <td>${ref}</td>
+                <td><span class="status-badge emerald">${metric}</span></td>
+                <td>${qty}</td>
+                <td>${date}</td>
+            `;
+            tbody.prepend(tr);
+            logAuditAction('production_records', `Logged ${metric} quantity: ${qty}`);
+            closeProductionModal();
+        }
+
+        function addHealthRow(event) {
+            event.preventDefault();
+            const ref = document.getElementById('heal_ref').value;
+            const type = document.getElementById('heal_type').value;
+            const desc = document.getElementById('heal_desc').value || '-';
+            const med = document.getElementById('heal_med').value || '-';
+            const cost = document.getElementById('heal_cost').value;
+            const date = document.getElementById('heal_date').value;
+
+            const tbody = document.getElementById('health-table-body');
+            const id = tbody.rows.length + 1;
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="font-bold">${id}</td>
+                <td>${ref}</td>
+                <td>${type}</td>
+                <td>${desc}</td>
+                <td>${med}</td>
+                <td>$${parseFloat(cost).toFixed(2)}</td>
+                <td>${date}</td>
+            `;
+            tbody.prepend(tr);
+            logAuditAction('health_records', `Added health event: ${type} for ${ref}`);
+            closeHealthModal();
+        }
+
+        function addFeedRow(event) {
+            event.preventDefault();
+            const name = document.getElementById('feed_name').value;
+            const cat = document.getElementById('feed_cat').value;
+            const qty = document.getElementById('feed_qty').value;
+            const cost = document.getElementById('feed_cost').value;
+
+            const tbody = document.getElementById('feed-inventory-table-body');
+            const id = tbody.rows.length + 1;
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="font-bold">${id}</td>
+                <td>${name}</td>
+                <td>${cat}</td>
+                <td>${qty} kg</td>
+                <td>$${parseFloat(cost).toFixed(2)}</td>
+            `;
+            tbody.prepend(tr);
+            document.getElementById('stat-feeds').innerText = tbody.rows.length;
+            logAuditAction('feed_inventory', `Added feed item: ${name} (${qty} kg)`);
+            closeFeedModal();
+        }
+
+        function addScheduleRow(event) {
+            event.preventDefault();
+            const feedId = document.getElementById('sched_feed_id').value;
+            const section = document.getElementById('sched_section').value;
+            const qty = document.getElementById('sched_qty').value;
+
+            const tbody = document.getElementById('feeding-schedule-table-body');
+            const id = tbody.rows.length + 1;
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="font-bold">${id}</td>
+                <td>Feed ID: ${feedId}</td>
+                <td>${section}</td>
+                <td>${qty} kg</td>
+            `;
+            tbody.prepend(tr);
+            logAuditAction('feeding_schedules', `Assigned ration to ${section} (${qty} kg)`);
+            closeScheduleModal();
+        }
+    </script>
+</body>
+</html>
