@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartFarm - Animal Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- APP CONTAINER -->
+    <div class="app-container">
+
+        <!-- SIDEBAR NAVIGATION -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                🌱 <span>SmartFarm</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-link active">📊 Dashboard</a>
+                <a href="#" class="nav-link">🐄 Livestock Registry</a>
+                <a href="#" class="nav-link">💉 Health & Meds</a>
+                <a href="#" class="nav-link">📈 Production & Yield</a>
+                <a href="#" class="nav-link">💰 Financials</a>
+            </nav>
+            <div class="sidebar-footer">
+                Innovation Ceremony Edition v1.0
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT AREA -->
+        <div class="main-content">
+            
+            <!-- TOP HEADER -->
+            <header class="top-header">
+                <div>
+                    <h1>Farm Overview</h1>
+                    <p>Welcome back! Here is your livestock performance at a glance.</p>
+                </div>
+                <div class="header-actions">
+                    <button onclick="alert('PWA Ready: You can add this to your home screen!')" class="btn-install">
+                        📱 Install App
+                    </button>
+                    <div class="user-avatar">
+                        RM
+                    </div>
+                </div>
+            </header>
+
+            <!-- DASHBOARD BODY -->
+            <main class="dashboard-body">
+                
+                <!-- HERO BANNER -->
+                <div class="hero-banner">
+                    <div class="hero-content">
+                        <span class="badge">Live Monitoring</span>
+                        <h2>Smart Livestock Tracking System</h2>
+                        <p>Optimizing animal health, yields, and farm economics seamlessly.</p>
+                    </div>
+                </div>
+
+                <!-- STATS GRID -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon emerald">🐄</div>
+                        <div>
+                            <p class="stat-label">Total Animals</p>
+                            <h3 id="total-count" class="stat-value">3</h3>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon blue">💉</div>
+                        <div>
+                            <p class="stat-label">Pending Checkups</p>
+                            <h3 class="stat-value">8</h3>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon amber">🥛</div>
+                        <div>
+                            <p class="stat-label">Daily Yield (L)</p>
+                            <h3 class="stat-value">450 L</h3>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon rose">⚠️</div>
+                        <div>
+                            <p class="stat-label">Quarantined</p>
+                            <h3 class="stat-value">1</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LIVESTOCK TABLE SECTION -->
+                <div class="table-card">
+                    <div class="table-header">
+                        <h3>Livestock Registry</h3>
+                        <button onclick="openModal()" class="btn-primary">
+                            ➕ Add New Animal
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tag Number</th>
+                                    <th>Species</th>
+                                    <th>Breed</th>
+                                    <th>Gender</th>
+                                    <th>Status</th>
+                                    <th class="text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="animal-table-body">
+                                <tr>
+                                    <td class="font-bold">#TAG-001</td>
+                                    <td>Cattle</td>
+                                    <td>Friesian</td>
+                                    <td>Female</td>
+                                    <td><span class="status-badge emerald">Active</span></td>
+                                    <td class="text-right">
+                                        <button onclick="deleteRow(this)" class="btn-danger">Remove / Sold</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="font-bold">#TAG-002</td>
+                                    <td>Goat</td>
+                                    <td>Boer</td>
+                                    <td>Male</td>
+                                    <td><span class="status-badge emerald">Active</span></td>
+                                    <td class="text-right">
+                                        <button onclick="deleteRow(this)" class="btn-danger">Remove / Sold</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="font-bold">#TAG-003</td>
+                                    <td>Ankole</td>
+                                    <td>Female</td>
+                                    <td><span class="status-badge amber">Quarantined</span></td>
+                                    <td class="text-right">
+                                        <button onclick="deleteRow(this)" class="btn-danger">Remove / Sold</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- ADD ANIMAL MODAL FORM -->
+    <div id="animalModal" class="modal-overlay hidden">
+        <div class="modal-box">
+            <h3>Register New Animal</h3>
+            <form id="animalForm" onsubmit="addAnimal(event)">
+                <div class="form-group">
+                    <label>Tag Number</label>
+                    <input type="text" id="tag" required placeholder="e.g. #TAG-004">
+                </div>
+                <div class="form-group">
+                    <label>Species</label>
+                    <select id="species">
+                        <option value="Cattle">Cattle</option>
+                        <option value="Goat">Goat</option>
+                        <option value="Sheep">Sheep</option>
+                        <option value="Pig">Pig</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Breed</label>
+                    <input type="text" id="breed" required placeholder="e.g. Jersey, Boer">
+                </div>
+                <div class="form-group">
+                    <label>Gender</label>
+                    <select id="gender">
+                        <option value="Female">Female</option>
+                        <option value="Male">Male</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select id="status">
+                        <option value="Active">Active</option>
+                        <option value="Quarantined">Quarantined</option>
+                        <option value="Sold">Sold</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" onclick="closeModal()" class="btn-secondary">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Animal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        const modal = document.getElementById('animalModal');
+
+        function openModal() {
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            modal.classList.add('hidden');
+        }
+
+        function addAnimal(event) {
+            event.preventDefault();
+
+            const tag = document.getElementById('tag').value;
+            const species = document.getElementById('species').value;
+            const breed = document.getElementById('breed').value;
+            const gender = document.getElementById('gender').value;
+            const status = document.getElementById('status').value;
+
+            let badgeClass = "emerald";
+            if(status === 'Quarantined') badgeClass = "amber";
+            if(status === 'Sold') badgeClass = "gray";
+
+            const tableBody = document.getElementById('animal-table-body');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td class="font-bold">${tag}</td>
+                <td>${species}</td>
+                <td>${breed}</td>
+                <td>${gender}</td>
+                <td><span class="status-badge ${badgeClass}">${status}</span></td>
+                <td class="text-right">
+                    <button onclick="deleteRow(this)" class="btn-danger">Remove / Sold</button>
+                </td>
+            `;
+
+            tableBody.prepend(newRow);
+            updateCount(1);
+            document.getElementById('animalForm').reset();
+            closeModal();
+        }
+
+        function deleteRow(button) {
+            const row = button.closest('tr');
+            row.remove();
+            updateCount(-1);
+        }
+
+        function updateCount(change) {
+            const countEl = document.getElementById('total-count');
+            let current = parseInt(countEl.innerText);
+            countEl.innerText = current + change;
+        }
+    </script>
+</body>
+</html>
