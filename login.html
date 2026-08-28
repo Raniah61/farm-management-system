@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Farm - Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body style="display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f6f8;">
+    <div style="background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 300px;">
+        <h2 style="margin-bottom: 20px; text-align: center;">Farm Login</h2>
+        <form id="login-form">
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px;">Username or email</label>
+                <input type="text" id="username" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+            </div>
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 5px;">Password</label>
+                <input type="password" id="password" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+            </div>
+            <button type="submit" style="width: 100%; padding: 10px; background-color: #2e7d32; color: white; border: none; border-radius: 4px; cursor: pointer;">Login</button>
+        </form>
+        <div style="margin-top: 15px; text-align: center;">
+            <button type="button" id="quick-register" style="background: none; border: none; color: #2e7d32; cursor: pointer; text-decoration: underline;">Create account with these credentials</button>
+        </div>
+    </div>
+
+    <script>
+        // Handle Registration
+        document.getElementById('quick-register').addEventListener('click', async function() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (!username || !password) {
+                alert('Please enter a username and password first.');
+                return;
+            }
+
+            try {
+                const res = await fetch('http://localhost:3000/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const result = await res.json();
+                alert(result.message);
+            } catch (err) {
+                console.error('Registration error:', err);
+                alert('Could not connect to server for registration.');
+            }
+        });
+
+        // Handle Login
+        document.getElementById('login-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('http://localhost:3000/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    localStorage.setItem('isLoggedIn', 'true');
+                    window.location.href = 'index.html'; 
+                } else {
+                    alert(data.message || 'Incorrect username or password!');
+                }
+            } catch (err) {
+                console.error('Connection error:', err);
+                alert('Could not connect to the server. Make sure server.js is running!');
+            }
+        });
+    </script>
+</body>
+</html>

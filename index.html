@@ -1,10 +1,17 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartFarm DB Console</title>
+    <title>SmartFarm DB</title>
     <link rel="stylesheet" href="style.css">
+    <script>
+    // If they aren't logged in, bounce them back to the login page immediately
+    if (localStorage.getItem('isLoggedIn') !== 'true') {
+        window.location.href = 'login.html';
+    }
+</script>
 </head>
 <body>
 
@@ -23,7 +30,7 @@
                 <a href="#" class="nav-link" onclick="switchView('feeding', this)">🌾 Feed & Rations</a>
             </nav>
             <div class="sidebar-footer">
-                <p>SmartFarm DB v2.6</p>
+                <p>SmartFarm DB </p>
             </div>
         </aside>
 
@@ -33,7 +40,7 @@
             <header class="top-header">
                 <div>
                     <h1 id="view-title">Farm Overview & Audit Logs</h1>
-                    <p id="view-subtitle">Real-time database records mirroring SQLite schema tables.</p>
+                    <p id="view-subtitle">Real-time database</p>
                 </div>
                 <div class="header-actions">
                     <button class="btn-install" onclick="triggerInstallPrompt()">📱 Add to Home Screen</button>
@@ -48,9 +55,9 @@
                 <section id="view-overview" class="view-section">
                     <div class="hero-banner">
                         <div class="hero-content">
-                            <span class="badge">Database Console</span>
-                            <h2>Integrated Agricultural Management System</h2>
-                            <p>Tracking live database entities from animals, batches, health logs, to system audit trails.</p>
+        
+                            <h2> Agricultural Management System</h2>
+                            <p>Tracking live database from the farm</p>
                         </div>
                     </div>
 
@@ -88,7 +95,7 @@
                     <!-- 7. AUDIT LOGS TABLE -->
                     <div class="table-card">
                         <div class="table-header">
-                            <h3>Audit Logs Table (`audit_logs`)</h3>
+                            <h3>Audit Logs</h3>
                         </div>
                         <div class="table-responsive">
                             <table>
@@ -106,14 +113,14 @@
                                         <td class="font-bold">#1</td>
                                         <td><span class="status-badge emerald">INSERT</span></td>
                                         <td>animals</td>
-                                        <td>Added tag_number: #TAG-001</td>
+                                        <td>Added tag_number: TAG-001</td>
                                         <td>2026-08-26 08:30:00</td>
                                     </tr>
                                     <tr>
                                         <td class="font-bold">#2</td>
                                         <td><span class="status-badge emerald">INSERT</span></td>
                                         <td>poultry_batches</td>
-                                        <td>Added batch_name: #FLOCK-010</td>
+                                        <td>Added batch_name: FLOCK-010</td>
                                         <td>2026-08-25 11:10:00</td>
                                     </tr>
                                     <tr>
@@ -133,7 +140,7 @@
                 <section id="view-animals" class="view-section hidden">
                     <div class="table-card">
                         <div class="table-header">
-                            <h3>Animals Table (`animals`)</h3>
+                            <h3>Animals </h3>
                             <button onclick="openAnimalModal()" class="btn-primary">➕ Insert Animal Record</button>
                         </div>
                         <div class="table-responsive">
@@ -153,7 +160,7 @@
                                 <tbody id="animals-table-body">
                                     <tr>
                                         <td class="font-bold">1</td>
-                                        <td>#TAG-001</td>
+                                        <td>TAG-001</td>
                                         <td>Dairy Cattle</td>
                                         <td>Ankole-Friesian Cross</td>
                                         <td>Female</td>
@@ -171,7 +178,7 @@
                 <section id="view-poultry" class="view-section hidden">
                     <div class="table-card">
                         <div class="table-header">
-                            <h3>Poultry Batches Table (`poultry_batches`)</h3>
+                            <h3>Poultry Batches</h3>
                             <button onclick="openPoultryModal()" class="btn-primary">➕ Insert Poultry Batch</button>
                         </div>
                         <div class="table-responsive">
@@ -191,7 +198,7 @@
                                 <tbody id="poultry-table-body">
                                     <tr>
                                         <td class="font-bold">1</td>
-                                        <td>#FLOCK-010</td>
+                                        <td>FLOCK-010</td>
                                         <td>Isa Brown</td>
                                         <td>500</td>
                                         <td>485</td>
@@ -209,7 +216,7 @@
                 <section id="view-production" class="view-section hidden">
                     <div class="table-card">
                         <div class="table-header">
-                            <h3>Production Records Table (`production_records`)</h3>
+                            <h3>Production Records </h3>
                             <button onclick="openProductionModal()" class="btn-primary">➕ Insert Production Log</button>
                         </div>
                         <div class="table-responsive">
@@ -226,15 +233,15 @@
                                 <tbody id="production-table-body">
                                     <tr>
                                         <td class="font-bold">1</td>
-                                        <td>Animal ID: 1 (#TAG-001)</td>
+                                        <td>Animal ID: 1 (TAG-001)</td>
                                         <td><span class="status-badge emerald">Milk Yield (Liters)</span></td>
                                         <td>22.5 L</td>
                                         <td>2026-08-26</td>
                                     </tr>
                                     <tr>
                                         <td class="font-bold">2</td>
-                                        <td>Batch ID: 1 (#FLOCK-010)</td>
-                                        <td><span class="status-badge amber">Egg Output (Crates)</span></td>
+                                        <td>Batch ID: 1 (FLOCK-010)</td>
+                                        <td><span class="status-badge amber">Egg Output (Crates/trays)</span></td>
                                         <td>15 Crates</td>
                                         <td>2026-08-26</td>
                                     </tr>
@@ -248,7 +255,7 @@
                 <section id="view-health" class="view-section hidden">
                     <div class="table-card">
                         <div class="table-header">
-                            <h3>Health Records Table (`health_records`)</h3>
+                            <h3>Health Records</h3>
                             <button onclick="openHealthModal()" class="btn-primary">➕ Insert Health Log</button>
                         </div>
                         <div class="table-responsive">
@@ -260,18 +267,18 @@
                                         <th>Event Type</th>
                                         <th>Description</th>
                                         <th>Medication Used</th>
-                                        <th>Cost ($)</th>
+                                        <th>Cost (UGX)</th>
                                         <th>Event Date</th>
                                     </tr>
                                 </thead>
                                 <tbody id="health-table-body">
                                     <tr>
                                         <td class="font-bold">1</td>
-                                        <td>Batch ID: 1 (#FLOCK-010)</td>
+                                        <td>Batch ID: 1 (FLOCK-010)</td>
                                         <td>Vaccination</td>
                                         <td>Newcastle Disease prevention</td>
                                         <td>Oral Vaccine Drops</td>
-                                        <td>$15.00</td>
+                                        <td>UGX15.00</td>
                                         <td>2026-08-20</td>
                                     </tr>
                                 </tbody>
@@ -284,7 +291,7 @@
                 <section id="view-feeding" class="view-section hidden">
                     <div class="table-card" style="margin-bottom: 24px;">
                         <div class="table-header">
-                            <h3>Feed Inventory Table (`feed_inventory`)</h3>
+                            <h3>Feed Inventory</h3>
                             <button onclick="openFeedModal()" class="btn-primary">➕ Add Feed Item</button>
                         </div>
                         <div class="table-responsive">
@@ -304,14 +311,14 @@
                                         <td>Dairy Meal Pellets</td>
                                         <td>Concentrates</td>
                                         <td>2250 kg (45 Bags)</td>
-                                        <td>$25.00</td>
+                                        <td>UGX25.00</td>
                                     </tr>
                                     <tr>
                                         <td class="font-bold">2</td>
                                         <td>Maize Bran</td>
                                         <td>Energy Feeds</td>
                                         <td>600 kg (12 Bags)</td>
-                                        <td>$14.00</td>
+                                        <td>UGX14.00</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -320,7 +327,7 @@
 
                     <div class="table-card">
                         <div class="table-header">
-                            <h3>Feeding Schedules Table (`feeding_schedules`)</h3>
+                            <h3>Feeding Schedules</h3>
                             <button onclick="openScheduleModal()" class="btn-primary">➕ Assign Ration</button>
                         </div>
                         <div class="table-responsive">
@@ -357,7 +364,7 @@
         <div class="modal-box">
             <h3>Insert Record into `animals`</h3>
             <form onsubmit="addAnimalRow(event)">
-                <div class="form-group"><label>Tag Number</label><input type="text" id="anim_tag" required placeholder="#TAG-002"></div>
+                <div class="form-group"><label>Tag Number</label><input type="text" id="anim_tag" required placeholder="TAG-002"></div>
                 <div class="form-group"><label>Species</label><input type="text" id="anim_species" required placeholder="Dairy Cattle"></div>
                 <div class="form-group"><label>Breed</label><input type="text" id="anim_breed" placeholder="Friesian"></div>
                 <div class="form-group"><label>Gender</label><select id="anim_gender"><option value="Female">Female</option><option value="Male">Male</option></select></div>
@@ -377,7 +384,7 @@
             <h3>Insert Record into `poultry_batches`</h3>
             <form onsubmit="addPoultryRow(event)">
                 <div class="form-group"><label>Batch Name</label><input type="text" id="poul_name" required placeholder="#FLOCK-011"></div>
-                <div class="form-group"><label>Breed</label><input type="text" id="poul_breed" placeholder="Broilers"></div>
+                <div class="form-group"><label>Breed</label><select id="poul_breed"<option value="Broiler">Broiler</option><option value="layers">layers</option></select></div>
                 <div class="form-group"><label>Initial Count</label><input type="number" id="poul_initial" required placeholder="200"></div>
                 <div class="form-group"><label>Current Count</label><input type="number" id="poul_current" required placeholder="195"></div>
                 <div class="form-group"><label>Purpose</label><input type="text" id="poul_purpose" required placeholder="Meat Production"></div>
